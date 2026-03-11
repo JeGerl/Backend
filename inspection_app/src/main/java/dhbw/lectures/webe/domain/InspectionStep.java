@@ -7,8 +7,17 @@ import jakarta.persistence.*;
 public class InspectionStep {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    
+    @Column(nullable = false)
+    private String description;
+    
+    @Column(nullable = false)
+    private String requirement;
+    
+    @Column(nullable = false)
+    private Integer orderindex;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

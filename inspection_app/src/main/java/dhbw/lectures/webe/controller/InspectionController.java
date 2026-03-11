@@ -4,7 +4,6 @@ import dhbw.lectures.webe.domain.Inspection;
 import dhbw.lectures.webe.domain.InspectionStep;
 import dhbw.lectures.webe.repository.InspectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
