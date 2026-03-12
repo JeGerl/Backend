@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class ChecklistStep {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     @Column(nullable = false)
@@ -32,6 +32,9 @@ public class ChecklistStep {
     // Getters and Setters
     public Long getId() {
         return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     
     

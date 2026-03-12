@@ -10,15 +10,7 @@ public class InspectionStep {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
-    @Column(nullable = false)
-    private String description;
-    
-    @Column(nullable = false)
-    private String requirement;
-    
-    @Column(nullable = false)
-    private Integer orderindex;
-    
+   
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StepStatus status;
@@ -29,7 +21,7 @@ public class InspectionStep {
     @Column
     private String photoPath;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "checklist_step_id")
     private ChecklistStep checklistStep;
     

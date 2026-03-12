@@ -68,7 +68,11 @@ public class ChecklistController {
             Checklist c = checklist.get();
             for (int i = 0; i < c.getSteps().size(); i++) {
                 if (c.getSteps().get(i).getId().equals(stepId)) {
-                    c.getSteps().set(i, checklistStep);
+                    ChecklistStep existingStep = c.getSteps().get(i);
+                    // Nur die relevanten Felder aktualisieren (ID bleibt unverändert)
+                    existingStep.setDescription(checklistStep.getDescription());
+                    existingStep.setRequirement(checklistStep.getRequirement());
+                    existingStep.setOrderindex(checklistStep.getOrderindex());
                     return checklistRepository.save(c);
                 }
             }
