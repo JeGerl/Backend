@@ -19,30 +19,46 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/inspections")
 public class InspectionController {
-    
+
     @Autowired
     private InspectionRepository inspectionRepository;
-    
+
     @GetMapping
-    @ApiResponses(value={
-        @ApiResponse(responseCode = "200", description = "Successfully found Inspections", content=@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully found Inspections", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
     })
     public List<Inspection> getAllInspections() {
         return inspectionRepository.findAll();
     }
-    
+
     @PostMapping
-    @ApiResponses(value={
-        @ApiResponse(responseCode = "200", description = "Successfully Created Inspections", content=@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully Created Inspections", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
     })
     public Inspection createInspection(@RequestBody Inspection inspection) {
         return inspectionRepository.save(inspection);
     }
-    
+
+    // Update Inspektion status um zu starten/zu stoppen
+    @PutMapping("/{id}/status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully Updated Inspection", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
+            @ApiResponse(responseCode = "404", description = "Inspection  not found", content = @Content)
+    })
+    public Inspection updatesatusInspection(@PathVariable Long id, @RequestBody Inspection Updateinspection) {
+        Optional<Inspection> inspection = inspectionRepository.findById(id);
+        if (inspection.isPresent()) {
+            Inspection i = inspection.get();
+            i.setStatus(Updateinspection.getStatus());
+            return inspectionRepository.save(i);
+        }
+        return null;
+    }
+
     @PostMapping("/{id}/steps")
-    @ApiResponses(value={
-        @ApiResponse(responseCode = "200", description = "Successfully Created Inspectionstep", content=@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
-        @ApiResponse(responseCode = "404", description = "Inspection not found", content = @Content)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully Created Inspectionstep", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
+            @ApiResponse(responseCode = "404", description = "Inspection not found", content = @Content)
     })
     public Inspection addStepToInspection(@PathVariable Long id, @RequestBody InspectionStep inspectionStep) {
         Optional<Inspection> inspection = inspectionRepository.findById(id);
@@ -53,13 +69,14 @@ public class InspectionController {
         }
         return null;
     }
-    
+
     @PutMapping("/{id}/steps/{stepId}")
-    @ApiResponses(value={
-        @ApiResponse(responseCode = "200", description = "Successfully Updated Inspectionstep", content=@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
-        @ApiResponse(responseCode = "404", description = "Inspection or StepID not found", content = @Content)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully Updated Inspectionstep", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
+            @ApiResponse(responseCode = "404", description = "Inspection or StepID not found", content = @Content)
     })
-    public Inspection updateStepInInspection(@PathVariable Long id, @PathVariable Long stepId, @RequestBody InspectionStep inspectionStep) {
+    public Inspection updateStepInInspection(@PathVariable Long id, @PathVariable Long stepId,
+            @RequestBody InspectionStep inspectionStep) {
         Optional<Inspection> inspection = inspectionRepository.findById(id);
         if (inspection.isPresent()) {
             Inspection i = inspection.get();
@@ -70,18 +87,19 @@ public class InspectionController {
                     existingStep.setStatus(inspectionStep.getStatus());
                     existingStep.setComment(inspectionStep.getComment());
                     existingStep.setPhotoPath(inspectionStep.getPhotoPath());
-                    // checklistStep wird wahrscheinlich nicht geändert, aber falls nötig: existingStep.setChecklistStep(inspectionStep.getChecklistStep());
+                    // checklistStep wird wahrscheinlich nicht geändert, aber falls nötig:
+                    // existingStep.setChecklistStep(inspectionStep.getChecklistStep());
                     return inspectionRepository.save(i);
                 }
             }
         }
         return null;
     }
-    
+
     @DeleteMapping("/{id}/steps/{stepId}")
-    @ApiResponses(value={
-        @ApiResponse(responseCode = "200", description = "Successfully Deleted Inspectionstep", content=@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
-        @ApiResponse(responseCode = "404", description = "Inspection or StepID not found", content = @Content)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully Deleted Inspectionstep", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Checklist.class)))),
+            @ApiResponse(responseCode = "404", description = "Inspection or StepID not found", content = @Content)
     })
     public Inspection removeStepFromInspection(@PathVariable Long id, @PathVariable Long stepId) {
         Optional<Inspection> inspection = inspectionRepository.findById(id);

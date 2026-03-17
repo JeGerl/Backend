@@ -17,6 +17,7 @@ public class InspectionStep {
     @Column(columnDefinition = "TEXT")
     private String comment;
 
+    @Lob
     @Column
     private String photoPath;
 
@@ -24,7 +25,7 @@ public class InspectionStep {
     @JoinColumn(name = "checklist_step_id")
     private ChecklistStep checklistStep;
 
-    // Constructor
+    // Konstructor
     public InspectionStep() {
     }
 
